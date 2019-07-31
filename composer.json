@@ -1,0 +1,13 @@
+{
+    "name": "etudiant/_boilerplate",
+    "authors": [
+        {
+            "name": "Florent Drousset",
+            "email": "florent.drousset@gmail.com"
+        }
+    ],
+    "autoload": {"psr-4" : {"app\\" : "app/"}},
+    "require": {
+        "predis/predis": "^1.1"
+    }
+}
