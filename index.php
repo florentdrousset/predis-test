@@ -28,13 +28,50 @@ require __DIR__ . '/vendor/autoload.php';
   <![endif]-->
 
   <!-- Add your site or application content here -->
-  <?php
-  $client = new Predis\Client();
-  $client->set('foo', 'bar');
-  $value = $client->get('foo');
 
+  <section>
+      <h1>Test Predis</h1>
+  <?php
+
+  try {
+      $redis = new Predis\Client();
+      /*
+          $redis = new PredisClient(array(
+              "scheme" => "tcp",
+              "host" => "127.0.0.1",
+              "port" => 6379));
+      */
+      echo "Successfully connected to Redis";
+  }
+  catch (Exception $e) {
+      echo "Couldn't connected to Redis";
+      echo $e->getMessage();
+  }
+
+
+  $client = new Predis\Client();
+  $client->set('age', 31);
+  $value = $client->incr('age');
   echo $value;
+
+  $list = "fruits";
+  $client->rpush($list, "Pomme");
+  $client->rpush($list, "Banane");
+  $client->lpush($list, "Kiwi");
+  $result = $client->lrange($list, 0, -1);
+
+  foreach($result as $element) {
+      echo '<br>'.$element.'</br>';
+  }
+
+  echo "Cette liste est longue de ". $client->llen($list)." elements.";
+
+  $client->set("1semaine", "j'expire dans une semaine !");
+  $client->expireat("1semaine", strtotime("+1 week"));
+  $ttl = $client->ttl("1 semaine");
+  echo $ttl;
   ?>
+  </section>
 
   <script src="js/vendor/modernizr-3.7.1.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
